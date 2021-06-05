@@ -17,10 +17,3 @@ def download_raw_story(story_id: int):
         print(resp.status_code)
         print(resp.text)
         raise RuntimeError(f"Unexpected status code: {resp.status_code}")
-
-
-if __name__ == "__main__":
-
-    while True:
-        e = input("Enter number:\n")
-        print(download_raw_story(int(e)))
