@@ -1,6 +1,7 @@
+from database_manager import DatabaseManager
 from text_processor import process_raw_text
 from utils import convert_datetime_to_timestamp, convert_html_to_plaintext
-from story import Story
+from story import Story, init_from_tuple
 from downloader import download_raw_story
 
 
@@ -16,16 +17,18 @@ def download_story(story_id: int):
 
 
 class StoryManager:
-    storage = dict()  # TODO: replace with db
+    storage = None
 
-    def __init__(self):
-        self.storage = dict()
+    def __init__(self, db_manager: DatabaseManager):
+        self.storage = db_manager
 
     def get_story(self, story_id):
         story = None
-        if story_id not in self.storage.keys():
+        story_data = self.storage.get_story(story_id)
+        if not story_data:
             story = download_story(story_id)
-            self.storage[story_id] = story
+            self.storage.insert_story(story.get_tuple())
         else:
-            story = self.storage[story_id]
+            story = init_from_tuple(*story_data)
+
         return story

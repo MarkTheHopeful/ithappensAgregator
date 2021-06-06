@@ -1,8 +1,14 @@
 from story_manager import StoryManager
+from database_manager import DatabaseManager
 
 if __name__ == "__main__":
-    sm = StoryManager()
+    dm = DatabaseManager()
+    # dm.drop_table()
+    # dm.create_table()
+    sm = StoryManager(dm)
+
     while True:
         e = input("Enter number:\n")
         story = sm.get_story(int(e))
-        print(story.story_text)
+        print(story.tags_pairs)
+
