@@ -19,7 +19,7 @@ class StoryManager:
     storage = dict()  # TODO: replace with db
 
     def __init__(self):
-        storage = dict()
+        self.storage = dict()
 
     def get_story(self, story_id):
         story = None
