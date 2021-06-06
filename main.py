@@ -1,23 +1,30 @@
-from downloader import download_raw_story
-from text_processor import process_raw_text
-from utils import convert_datetime_to_timestamp, convert_html_to_plaintext
-from story import Story
-
-
-def get_story(story_id: int):
-    raw_text = download_raw_story(story_id)
-    headline, datetime_text, tags_pairs, story_text, likes_cnt = process_raw_text(raw_text)
-
-    timestamp = convert_datetime_to_timestamp(datetime_text)
-    story_text = convert_html_to_plaintext(story_text)
-
-    result_story = Story(story_id, headline, timestamp, tags_pairs, story_text, likes_cnt)
-    return result_story
-
+from story_manager import StoryManager
+from database_manager import DatabaseManager
+from custom_exceptions import StoryNotFoundException
 
 if __name__ == "__main__":
+    dm = DatabaseManager()
+    # dm.drop_table()
+    # dm.create_table()
+    sm = StoryManager(dm)
 
     while True:
         e = input("Enter number:\n")
-        story = get_story(int(e))
-        print(story.story_text)
+        if e == "quit":
+            print("Exiting...")
+            break
+        try:
+            story_id = int(e)
+        except ValueError:
+            print("Not a story number entered")
+            continue
+
+        try:
+            story = sm.get_story(story_id)
+        except StoryNotFoundException as e:
+            print(e)
+            continue
+        except ConnectionError:
+            print("Connection failed. There may be no internet connection.")
+            continue
+        print(story.tags_pairs)
