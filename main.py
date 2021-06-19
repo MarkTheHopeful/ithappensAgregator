@@ -3,12 +3,12 @@ from database_manager import DatabaseManager
 from custom_exceptions import StoryNotFoundException
 
 
-def download_stories_to_lim(man: StoryManager, lim: int):
-    for i in range(1, lim + 1):
+def download_stories_to_lim(man: StoryManager, limit: int):
+    for i in range(1, limit + 1):
         try:
-            story_temp = sm.get_story(i)
-        except StoryNotFoundException as e:
-            print(e)
+            man.get_story(i)
+        except StoryNotFoundException as ex:
+            print(ex)
             break
         except ConnectionError:
             print("Connection failed. There may be no internet connection.")
