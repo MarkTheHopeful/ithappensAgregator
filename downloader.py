@@ -8,6 +8,9 @@ def download_raw_story(story_id: int):
     link = DOWNLOAD_LINK_PREFIX + str(story_id)
 
     resp = requests.get(link)
+    print(resp.raw)  # TODO: Find a way to see the downloaded size
+    # sz = int(resp.headers['content-length'])
+    # print(f"Size of the story number {story_id}: {sz} bytes.")
 
     if resp.status_code == 200:
         return resp.text
